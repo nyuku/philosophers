@@ -41,4 +41,4 @@ add_executable(philosophers
         src/libft/ft_substr.c
         src/libft/ft_tolower.c
         src/libft/ft_toupper.c
-        src/libft/libft.h)
+        src/libft/libft.h src/check_arg.c src/threads_maker.c)

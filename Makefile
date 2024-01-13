@@ -25,7 +25,7 @@ START_TXT		=	echo "$(GREEN)Compilation of $(NAME) just started$(ENDCOLOR)"
 END_COMP_TXT	=	echo "$(GREEN)Compilation is done$(ENDCOLOR)"
 CLEAN_TXT		=	echo "$(GREEN)Cleaning objects$(ENDCOLOR)"
 FCLEAN_TXT		=	echo "$(GREEN)Cleaning program$(ENDCOLOR)"
-BS_TXT			=	echo "\n\n\n\n"
+BS_TXT			=	echo "\n\n"
 CHARG_LINE_TXT	=	echo "$(BG_GREEN)    $(ENDCOLOR)\c"
 
 # ---------------- FLAGS --------------
@@ -34,24 +34,16 @@ DEBUG			=	-fsanitize=address -g3
 
 # ---------------- Sources -----------
 SRC				=	./src/main.c \
-					./src/ft_printf/ft_printf.c \
-					./src/ft_printf/s_c_p_d_i.c \
-					./src/ft_printf/u_x_X.c
+					./src/check_arg.c \
+					./src/threads_maker.c
 
 LIB				=	./includes/philosophers.h
 
 # ---------------- Objets -----------
 OBJS			=	$(addprefix obj/, $(SRC:.c=.o))
 
-# --------------- LIBFT --------------------
-LIBFT			=	./libft/libft.a
-MLIBFT			=	@$(MAKE) -C libft
-
 # --------------- Regles --------------------
-all: $(NAME) lib
-
-lib:
-	@$(MLIBFT)
+all: $(NAME)
 
 obj/%.o: %.c
 	@mkdir -p $(dir $@)
@@ -59,9 +51,8 @@ obj/%.o: %.c
 	@$(CHARG_LINE_TXT)
 
 $(NAME): ${OBJS}
-	@make -C libft
 	@$(BS_TXT)
-	@${CC} ${CFLAGS} -o ${NAME} ${OBJS} -lreadline ${LIBFT}
+	@${CC} ${CFLAGS} -o ${NAME} ${OBJS} -lreadline
 	@$(END_COMP_TXT)
 
 rleak:
