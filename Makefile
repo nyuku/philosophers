@@ -35,7 +35,10 @@ DEBUG			=	-fsanitize=address -g3
 # ---------------- Sources -----------
 SRC				=	./src/main.c \
 					./src/check_arg.c \
-					./src/threads_maker.c
+					./src/threads_maker.c\
+					./src/threads.c\
+					./src/utils.c\
+					./src/node_list.c
 
 LIB				=	./includes/philosophers.h
 

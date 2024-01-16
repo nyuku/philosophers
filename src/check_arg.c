@@ -1,4 +1,5 @@
 #include "../includes/philosophers.h"
+
 int	check_if_number_str(char *str)
 {
 	int	i;
@@ -56,7 +57,7 @@ void	check_all_arg(char **av, int ac) //exit tout seul si error
 	else
 	{
 
-		printf("pas assez de arg\n");
+		printf("pas assez de arg\n1)nombre de philo\n2)time_to_die\n3)time to eat\n4)time to sleep\n5)nombre de repas\n");
 		exit (0);
 	}
 }
