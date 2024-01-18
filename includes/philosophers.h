@@ -29,13 +29,23 @@ typedef struct s_philo
 	int 			order;
 	struct s_philo	*next;
 	struct s_philo	*prev;
-//	long	nbr;
-//	long	death;
-//	long	eat;
-//	long	sleep;
-//	long	nbr_eat;
 }			t_philo;
 
+typedef struct s_mutex
+{
+	pthread_mutex_t	printing;
+	pthread_mutex_t	time;
+}			t_mutex;
+
+
+typedef	struct s_begin // pourrait etre des long? depend comment check_arg
+{
+	int				nb_philo;
+	int				time_to_die;
+	int 			time_to_eat;
+	int				time_to_sleep;
+	int				nb_lunch;
+}			t_begin;
 /*◇───────────────────────────────────────────────────────────────◇*\
 *	Prototypes
 \*◇───────────────────────────────────────────────────────────────◇*/
@@ -61,5 +71,8 @@ char	*ft_itoa(int n);
 int	ft_nbrcount(int n);
 size_t	ft_strlen(const char *str);
 int	ft_atoi(const char *nptr);
+
+//init
+void init(char **av, int ac, t_begin *begin);
 
 #endif

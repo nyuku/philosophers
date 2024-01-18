@@ -28,7 +28,7 @@ t_philo	*create_node(int nb_philo)// cree un node avec toutes les info
 	{
 		printf ("pas pu creer le mutex\n");
 		free(new_node); // Libérez la mémoire en cas d'erreur
-		return NULL;
+		return (NULL);
 	}
 	new_node->next = NULL;
 	return (new_node);
@@ -72,7 +72,7 @@ void	print_nodes(t_philo **node)
 		printf("c'est vide\n");
 	while (current_node != NULL)
 	{
-		printf("philo n*(%d) - id : %ld\n", current_node->order, (unsigned long)current_node->id_philo);
+		printf("philo n*(%d) - id : %ld - Mutex = %p \n", current_node->order, (unsigned long)current_node->id_philo, (void*)&current_node->mutex);
 		current_node = current_node->next;
 	}
 }

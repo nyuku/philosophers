@@ -1,0 +1,7 @@
+1)init les valeurs donnée en arguments dans une struct pour meilleur accès
+  checker les variables, max int et pas de nbre negatif
+2) liste chainée contenant les id des threads -> cree x nb de threads, avec chacun leur mutex
+3)creer les mutex pour pouvoir faire des actions sans se faire marcher dessus
+    -print
+    - acces info, mort?
+    -..
