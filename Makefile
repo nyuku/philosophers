@@ -56,7 +56,7 @@ obj/%.o: %.c
 
 $(NAME): ${OBJS}
 	@$(BS_TXT)
-	@${CC} ${CFLAGS} -o ${NAME} ${OBJS} -lreadline
+	@${CC} $(DEBUG) ${CFLAGS} -o ${NAME} ${OBJS}
 	@$(END_COMP_TXT)
 
 rleak:
@@ -80,5 +80,3 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re rleak
-
-# Reste de votre Makefile inchangé

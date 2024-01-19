@@ -74,5 +74,5 @@ int	ft_atoi(const char *nptr);
 
 //init
 void init(char **av, int ac, t_begin *begin);
-
+void	mutex_utils(t_mutex *mutex_utils);
 #endif

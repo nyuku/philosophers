@@ -40,7 +40,7 @@ void	check_all_arg(char **av, int ac) //exit tout seul si error
 	int	i;
 
 	i = 1;
-	if (ac < 7)
+	if (ac < 7 && ac != 1)
 	{
 		while ( i < ac)
 		{
@@ -49,14 +49,12 @@ void	check_all_arg(char **av, int ac) //exit tout seul si error
 				printf("mauvais arg\n");
 				exit(0);
 			}
-
 			i++;
 		}
 		printf("gooooood\n");
 	}
 	else
 	{
-
 		printf("pas assez de arg\n1)nombre de philo\n2)time_to_die\n3)time to eat\n4)time to sleep\n5)nombre de repas\n");
 		exit (0);
 	}

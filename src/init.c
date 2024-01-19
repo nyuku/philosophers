@@ -12,8 +12,8 @@ void init(char **av, int ac, t_begin *begin)
 
 void	mutex_utils(t_mutex *mutex_utils)
 {
-	pthread_mutex_init(mutex_utils->printing, NULL);
-	pthread_mutex_init(mutex_utils->time, NULL);
+	pthread_mutex_init(&mutex_utils->printing, NULL);
+	pthread_mutex_init(&mutex_utils->time, NULL);
 	//pthread_mutex_init(mutex_utils->index, NULL);
 	//pthread_mutex_init(mutex_utils>dead, NULL);
 	//pthread_mutex_init(mutex_utils->meal, NULL);
