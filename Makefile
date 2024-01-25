@@ -39,7 +39,9 @@ SRC				=	./src/main.c \
 					./src/threads.c\
 					./src/utils.c\
 					./src/node_list.c\
-					./src/init.c
+					./src/init.c\
+					./src/time.c\
+					./src/gardian.c
 
 LIB				=	./includes/philosophers.h
 

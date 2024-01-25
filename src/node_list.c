@@ -34,9 +34,9 @@ t_philo	*create_node(int nb_philo)// cree un node avec toutes les info
 	return (new_node);
 }
 
-t_philo	*creat_list( int nb_philo)
+t_philo	*creat_list( int nb_philo, t_begin *begin)
 {
-
+	(void)begin;
 	t_philo	*new_list;
 	t_philo	*tail;
 	t_philo	*new_node;
@@ -59,6 +59,7 @@ t_philo	*creat_list( int nb_philo)
 		tail = new_node;
 		i++;
 	}
+	//on a cree les threads, maintenant le watcher
 	return (new_list);
 }
 
