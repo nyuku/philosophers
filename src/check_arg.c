@@ -40,7 +40,7 @@ void	check_all_arg(char **av, int ac) //exit tout seul si error
 	int	i;
 
 	i = 1;
-	if (ac < 7 && ac != 1)
+	if ((ac == 5 || ac == 6))
 	{
 		while ( i < ac)
 		{

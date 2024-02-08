@@ -1,5 +1,15 @@
 #include "../includes/philosophers.h"
 
+long	get_current_time(void)
+{
+	struct timeval	time;
+	long			time_now;
+
+	gettimeofday(&time, NULL);
+	time_now = (time.tv_sec * 1000 + time.tv_usec / 1000);
+	return (time_now);
+}
+
 void	time_start(t_begin *begin)
 {
 	struct timeval	start;

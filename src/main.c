@@ -12,14 +12,41 @@ void    wait_thread(t_philo	*philo, t_begin *begin)
 	pthread_join(begin->id_gardian, NULL);
 }
 
-void    kill_mutex(t_philo	*philo)
+void free_mutex(t_mutex *mutex, t_eye_arg *eye_arg) 
+{
+    if (mutex != NULL) 
+	{
+        // Détruire les mutex avant de libérer la mémoire
+        if (mutex->printing != NULL) {
+            pthread_mutex_destroy(mutex->printing);
+            free(mutex->printing);
+        }
+        if (mutex->time != NULL) {
+            pthread_mutex_destroy(mutex->time);
+            free(mutex->time);
+        }
+
+        // Libérer la structure t_mutex elle-même
+        free(mutex);
+		mutex = NULL;
+    }
+	if (eye_arg != NULL) 
+	{
+		free(eye_arg);
+		eye_arg = NULL; // Éviter les dangling pointers
+	}
+}
+
+
+void    kill_forks(t_philo	*philo)
 {
 	t_philo    *current;
 
 	current = philo;
 	while(current)
 	{
-		pthread_mutex_destroy(&current->mutex);
+		pthread_mutex_destroy(current->own_fork);
+		free(philo->own_fork);
 		current = current->next;
 	}
 }
@@ -44,43 +71,43 @@ int main(int ac, char **av)
 {
 
 	t_begin begin;
-	t_mutex *mutex;
-
-//	begin = NULL;
+    t_mutex *mutex;
+    t_philo *philo = NULL; // Liste des philosophes
 	mutex = NULL;
-	printf("Time(ms)\tPhilo\tAction\t\n");
 
 	check_all_arg(av,ac);//return et stop si probleme, rien a free
-	init(av,ac,&begin); //init valeur arg en struc,si se passe mal...liberer la struc
+	printf("Time(ms)\tPhilo\tAction\t\n");
+
+	init_value_start(av, ac, &begin);
 	time_start(&begin);
+
 	table_for_one(av, ac, &begin);
 
+	
+	 //init
+	mutex = init_mutex();
+	init_all(&philo, &begin, ac, av);
+	t_eye_arg *eye_arg = init_eye_arg(philo, &begin, mutex);
 
-	//mutex
-	mutex_utils(mutex); // cree la liste des mutex pour print, check valeur ec
 
-	//creat philo
-	t_philo *philo = creat_list(begin.nb_philo,&begin);
-	if (philo == NULL)// si un soucis lors de la creationde la liste, threads, mutex,etc
+
+	int bool_threads;
+	bool_threads =pthread_create(&begin.id_gardian, NULL, keep_an_eye,(void *)eye_arg);
+	if( bool_threads == ERROR)
 	{
-		return(ERROR);
+		printf("pas pu creer le thread\n");
+		exit(0);
 	}
 
-	//gardian
-	t_eye_arg *gardian_arg = init_arg_gardian(&begin, philo);
-	if (gardian_arg != NULL) {
-		if (pthread_create(&begin.id_gardian, NULL, keep_an_eye, (void *)gardian_arg) != 0)
-		{
-			free(gardian_arg);
-		}
-	}
+	init_threads(philo, &begin, eye_arg);
 
 
 
-	print_nodes(&philo);//test
-
+	//end
 	wait_thread(philo, &begin);
-	kill_mutex(philo);
+	kill_forks(philo);
+	free_mutex(mutex, eye_arg);
+	free_philo_list(philo);
 	return (SUCCESS);
 
 }

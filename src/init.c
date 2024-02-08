@@ -1,6 +1,48 @@
 #include "../includes/philosophers.h"
 
-void init(char **av, int ac, t_begin *begin)
+void init_all(t_philo **philo, t_begin *begin, int argc, char **argv) 
+{
+	(void)argc;
+	(void)argv;
+	//init_arg_gardian(begin, *philo);
+    init_philos(philo, begin->nb_philo, begin);
+}
+
+void	init_threads(t_philo *philo, t_begin *begin, t_eye_arg *eye_arg)
+{
+	t_philo *current;
+	current = philo;
+	(void)begin;
+	int bool_threads;
+	while(current)
+	{
+		bool_threads = pthread_create(&current->id_philo, NULL, routine, (void *)eye_arg); // ici creation du philo et appe;ler la struc *arg
+		if ( bool_threads == ERROR)
+		{
+			printf("pas pu creer le thread\n");
+			exit(0);
+		}
+
+		current = current->next;
+	}
+	
+}
+
+void init_philos(t_philo **philo, int nb_philo, t_begin *begin) 
+{
+    // Utilisation de creat_list pour créer et initialiser la liste des philosophes
+    *philo = creat_list(nb_philo, begin);
+
+    // Vérification que la création a réussi
+    if (*philo == NULL) {
+        fprintf(stderr, "Erreur lors de la création de la liste des philosophes\n");
+        // Ici, tu pourrais gérer l'erreur plus spécifiquement, par exemple en libérant des ressources allouées précédemment
+        exit(EXIT_FAILURE);
+    }
+}
+
+
+void init_value_start(char **av, int ac, t_begin *begin)
 {
 	begin->nb_philo = ft_atoi(av[1]);
 	begin->time_to_die = ft_atoi(av[2]);
@@ -12,14 +54,15 @@ void init(char **av, int ac, t_begin *begin)
 		begin->nb_lunch = -1; // on utilise la valeur dans la routine comme condition de fin, mettre un neg pour indiqué nada
 }
 
-void	mutex_utils(t_mutex *mutex_utils)
-{
-	pthread_mutex_init(&mutex_utils->printing, NULL);
-	pthread_mutex_init(&mutex_utils->time, NULL);
-	//pthread_mutex_init(mutex_utils->index, NULL);
-	//pthread_mutex_init(mutex_utils>dead, NULL);
-	//pthread_mutex_init(mutex_utils->meal, NULL);
-}
+// void	init_mutex(t_mutex *mutex)
+// {
+	
+// 	pthread_mutex_init(mutex->printing, NULL);
+// 	pthread_mutex_init(mutex->time, NULL);
+// 	//pthread_mutex_init(mutex_utils->index, NULL);
+// 	//pthread_mutex_init(mutex_utils>dead, NULL);
+// 	//pthread_mutex_init(mutex_utils->meal, NULL);
+// }
 
 t_eye_arg *init_arg_gardian(t_begin *begin, t_philo *philo)
 {
@@ -33,4 +76,43 @@ t_eye_arg *init_arg_gardian(t_begin *begin, t_philo *philo)
 	eye_arg->begin = begin;
 
 	return (eye_arg);
+}
+
+t_eye_arg *init_eye_arg(t_philo *philo, t_begin *begin, t_mutex *mutex) 
+{
+    t_eye_arg *eye_arg = (t_eye_arg *)malloc(sizeof(t_eye_arg));
+    if (eye_arg == NULL) {
+        perror("Failed to allocate t_eye_arg");
+        exit(EXIT_FAILURE);
+    }
+    eye_arg->philo = philo;
+    eye_arg->begin = begin;
+    eye_arg->mutex = mutex;
+
+    return eye_arg;
+}
+
+t_mutex *init_mutex(void) 
+{
+    t_mutex *mutex = (t_mutex *)malloc(sizeof(t_mutex));
+    if (mutex == NULL) {
+        perror("Failed to allocate t_mutex");
+        exit(EXIT_FAILURE);
+    }
+
+    mutex->printing = malloc(sizeof(pthread_mutex_t));
+    if (mutex->printing == NULL) {
+        perror("Failed to allocate printing mutex");
+        exit(EXIT_FAILURE);
+    }
+    pthread_mutex_init(mutex->printing, NULL);
+
+    mutex->time = malloc(sizeof(pthread_mutex_t));
+    if (mutex->time == NULL) {
+        perror("Failed to allocate time mutex");
+        exit(EXIT_FAILURE);
+    }
+    pthread_mutex_init(mutex->time, NULL);
+
+    return mutex;
 }

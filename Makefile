@@ -3,13 +3,13 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: angnguye <angnguye@student.42.fr>          +#+  +:+       +#+         #
+#    By: angela <angela@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/24 22:57:11 by angela            #+#    #+#              #
-#    Updated: 2023/10/13 00:35:11 by angnguye         ###   ########.fr        #
+#    Updated: 2024/02/05 15:03:05 by angela           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-# ---------------- Nickname --------------
+
 NAME			=	philosophers
 RM				=	rm -f
 CC				=	gcc
@@ -41,7 +41,8 @@ SRC				=	./src/main.c \
 					./src/node_list.c\
 					./src/init.c\
 					./src/time.c\
-					./src/gardian.c
+					./src/gardian.c\
+					./src/routine.c
 
 LIB				=	./includes/philosophers.h
 
