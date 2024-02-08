@@ -35,6 +35,7 @@ typedef struct			s_philo
 	struct s_philo		*next;
 	struct s_philo		*prev;
 	int					ticket_repas;// decrementer a chaque repas
+	unsigned long long	old_time_last_meal;
 	unsigned long long	time_last_meal;
 	int					*stop;// status pour check par gardian
 	int 				belly_full;
@@ -80,7 +81,7 @@ int					check_int_limit(char *av);
 void				check_all_arg(char **av, int ac);
 void				*routine_hello(void *arg);
 int					threads_maker(void);
-void				free_mutex(t_mutex *mutex, t_eye_arg *eye_arg);
+void				free_mutex(t_mutex *mutex);
 
 //threads
 void				*thread_routine(void *arg);
@@ -90,7 +91,7 @@ int					init_philo(int ac);
 t_philo				*create_node(int nb_philo);
 t_philo				*creat_list(int nb_philo, t_begin *begin);
 void				print_nodes(t_philo **node);
-void				init_threads(t_philo *philo, t_begin *begin, t_eye_arg *eye_arg);
+
 void				free_philo_list(t_philo *philo);
 
 //utils
@@ -101,6 +102,7 @@ size_t				ft_strlen(const char *str);
 int					ft_atoi(const char *nptr);
 
 //init
+t_eye_arg 			**init_threads(t_philo *philo, t_begin *begin, t_mutex *mutex);
 t_eye_arg			*init_eye_arg(t_philo *philo, t_begin *begin, t_mutex *mutex);
 void				init_value_start(char **av, int ac, t_begin *begin);
 t_mutex 			*init_mutex(void);
@@ -108,7 +110,7 @@ t_eye_arg			*init_arg_gardian(t_begin *begin, t_philo *philo);
 void				init_philos(t_philo **philo, int nb_philo, t_begin *begin) ;
 void				init_all(t_philo **philo, t_begin *begin, int argc, char **argv) ;
 //time
-unsigned long long	time_dif(t_begin *begin);
+unsigned long long	time_dif(suseconds_t	current_time);
 void				time_start(t_begin *begin);
 long				get_current_time(void);
 
@@ -121,7 +123,7 @@ void    			wait_thread(t_philo	*philo, t_begin *begin);
 //routine
 void				*routine(void *arg);
 void				go_eat(t_begin *begin, t_philo *philo, t_mutex *mutex);
-void				go_sleep(t_begin *begin, t_philo *philo, t_mutex *mutex);
-void				go_think(t_begin *begin, t_philo *philo, t_mutex *mutex);
+void				go_sleep(t_begin *begin,t_philo *philo, t_mutex *mutex);
+void				go_think(t_philo *philo, t_mutex *mutex, t_begin *begin);
 
 #endif

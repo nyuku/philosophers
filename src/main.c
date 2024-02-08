@@ -1,4 +1,14 @@
 #include "../includes/philosophers.h"
+
+void free_eye_args(t_eye_arg **eye_args, int count)
+{
+    for (int i = 0; i < count; i++)
+    {
+        free(eye_args[i]);
+    }
+    free(eye_args);
+}
+
 void    wait_thread(t_philo	*philo, t_begin *begin)
 {
 	t_philo    *current;
@@ -12,7 +22,7 @@ void    wait_thread(t_philo	*philo, t_begin *begin)
 	pthread_join(begin->id_gardian, NULL);
 }
 
-void free_mutex(t_mutex *mutex, t_eye_arg *eye_arg) 
+void free_mutex(t_mutex *mutex) 
 {
     if (mutex != NULL) 
 	{
@@ -30,11 +40,6 @@ void free_mutex(t_mutex *mutex, t_eye_arg *eye_arg)
         free(mutex);
 		mutex = NULL;
     }
-	if (eye_arg != NULL) 
-	{
-		free(eye_arg);
-		eye_arg = NULL; // Éviter les dangling pointers
-	}
 }
 
 
@@ -87,27 +92,19 @@ int main(int ac, char **av)
 	 //init
 	mutex = init_mutex();
 	init_all(&philo, &begin, ac, av);
-	t_eye_arg *eye_arg = init_eye_arg(philo, &begin, mutex);
+	// t_eye_arg *eye_arg = init_eye_arg(philo, &begin, mutex);
 
 
-
-	int bool_threads;
-	bool_threads =pthread_create(&begin.id_gardian, NULL, keep_an_eye,(void *)eye_arg);
-	if( bool_threads == ERROR)
-	{
-		printf("pas pu creer le thread\n");
-		exit(0);
-	}
-
-	init_threads(philo, &begin, eye_arg);
+	t_eye_arg	**eye_args = init_threads(philo, &begin, mutex);
 
 
 
 	//end
 	wait_thread(philo, &begin);
 	kill_forks(philo);
-	free_mutex(mutex, eye_arg);
+	free_mutex(mutex);
 	free_philo_list(philo);
+	free_eye_args(eye_args, begin.nb_philo);
 	return (SUCCESS);
 
 }

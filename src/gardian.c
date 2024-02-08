@@ -16,15 +16,15 @@ void print_log(int time, char *message, int ph_id, pthread_mutex_t *print_mutex,
 }
 
 
-int starving(t_philo *philo, t_begin *begin)
+int starving(t_philo *philo, t_begin *begin)// check entre les repas...pas temps actuel
 {
 	struct	timeval time;
 
 	gettimeofday(&time, NULL);
-	unsigned long long currentTime = (unsigned long long )(time.tv_sec * 1000) + (unsigned long long )(time.tv_usec / 1000); // Convertir en millisecondes
+	unsigned long long current_time = (unsigned long long )(time.tv_sec * 1000) + (unsigned long long )(time.tv_usec / 1000); // Convertir en millisecondes
 
 	// Vérifier si le philosophe est en train de mourir de faim
-	if (((unsigned long long )currentTime - philo->time_last_meal) > begin->time_to_eat)
+	if (((current_time - philo->time_last_meal) > begin->time_to_eat) || ((philo->old_time_last_meal) - (philo->time_last_meal) > begin->time_to_eat))
 	{
 		return ERROR; // Le philosophe est en train de mourir de faim
 	}
@@ -36,8 +36,8 @@ int starving(t_philo *philo, t_begin *begin)
 
 void *keep_an_eye(void *arg)
 {
-	t_eye_arg *eye_arg = (t_eye_arg *)arg;  // Cast de void* à t_eye_arg*
-	t_philo *philo;
+	// t_eye_arg *eye_arg = (t_eye_arg *)arg;  // Cast de void* à t_eye_arg*
+	// t_philo *philo;
 	int philosophers;
 	int all_lunch_eaten;
 	pthread_mutex_t m_lunch_eaten;

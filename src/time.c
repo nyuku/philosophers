@@ -18,7 +18,7 @@ void	time_start(t_begin *begin)
 	begin->start_time = (start.tv_sec * 1000 + start.tv_usec / 1000);
 }
 
-unsigned long long	time_dif(t_begin *begin)
+unsigned long long	time_dif(suseconds_t	current_time)
 {
 	long long int	result;
 	long long int	temp_now;
@@ -26,6 +26,6 @@ unsigned long long	time_dif(t_begin *begin)
 
 	gettimeofday(&after, NULL);
 	temp_now = (after.tv_sec * 1000 + after.tv_usec / 1000);
-	result = temp_now - begin->start_time;
+	result = temp_now - current_time;
 	return (result);
 }

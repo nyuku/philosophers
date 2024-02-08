@@ -52,7 +52,7 @@ t_philo *creat_list(int nb_philo, t_begin *begin)
 
     while (i <= nb_philo) 
 	{
-        new_philo = create_node(i);
+		new_philo = create_node(i);
 		
         if (!head) 
 		{
@@ -67,6 +67,10 @@ t_philo *creat_list(int nb_philo, t_begin *begin)
         }
 		before = new_philo;
 		new_philo->ticket_repas = begin->nb_lunch;
+		new_philo->old_time_last_meal = 0;//test init
+		new_philo->time_last_meal = 0;//test init
+		new_philo->belly_full = 0;
+
         i++;
     }
 	new_philo->right_fork = fist_fork;

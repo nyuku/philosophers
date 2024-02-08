@@ -8,24 +8,33 @@ void init_all(t_philo **philo, t_begin *begin, int argc, char **argv)
     init_philos(philo, begin->nb_philo, begin);
 }
 
-void	init_threads(t_philo *philo, t_begin *begin, t_eye_arg *eye_arg)
+t_eye_arg	**init_threads(t_philo *philo, t_begin *begin, t_mutex *mutex)
 {
 	t_philo *current;
 	current = philo;
 	(void)begin;
 	int bool_threads;
+
+	t_eye_arg **eye_args = malloc(begin->nb_philo * sizeof(t_eye_arg*));
+	if (!eye_args)
+    {
+        perror("Allocation failed");
+        exit(EXIT_FAILURE);
+    }
+	int i = 0;
 	while(current)
 	{
-		bool_threads = pthread_create(&current->id_philo, NULL, routine, (void *)eye_arg); // ici creation du philo et appe;ler la struc *arg
+		eye_args[i]  = init_eye_arg(current, begin, mutex);
+		bool_threads = pthread_create(&current->id_philo, NULL, routine, (void *)eye_args[i]); // ici creation du philo et appe;ler la struc *arg
 		if ( bool_threads == ERROR)
 		{
 			printf("pas pu creer le thread\n");
 			exit(0);
 		}
-
 		current = current->next;
+		i++;
 	}
-	
+	 return eye_args;
 }
 
 void init_philos(t_philo **philo, int nb_philo, t_begin *begin) 
@@ -54,15 +63,7 @@ void init_value_start(char **av, int ac, t_begin *begin)
 		begin->nb_lunch = -1; // on utilise la valeur dans la routine comme condition de fin, mettre un neg pour indiqué nada
 }
 
-// void	init_mutex(t_mutex *mutex)
-// {
-	
-// 	pthread_mutex_init(mutex->printing, NULL);
-// 	pthread_mutex_init(mutex->time, NULL);
-// 	//pthread_mutex_init(mutex_utils->index, NULL);
-// 	//pthread_mutex_init(mutex_utils>dead, NULL);
-// 	//pthread_mutex_init(mutex_utils->meal, NULL);
-// }
+
 
 t_eye_arg *init_arg_gardian(t_begin *begin, t_philo *philo)
 {

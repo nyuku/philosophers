@@ -14,8 +14,10 @@ void *routine(void *arg)
     t_philo *philo = eye_arg->philo;
     t_begin *begin = eye_arg->begin;
     t_mutex *mutex = eye_arg->mutex;
-	if (philo->order % 2)// si paire on fait commencer les paires?
+    if (philo->order % 2)// si paire on fait commencer les paires?
 		usleep(3000);//3 millisecondes
+    printf("coucou je suis le philou %d\n", philo->order);
+	
 	
 	while(1)// ou condition de mort non null while (!death_announce)
 	{
@@ -24,7 +26,7 @@ void *routine(void *arg)
 			break;
 		go_eat(begin, philo, mutex);
 		go_sleep(begin, philo, mutex);
-		go_think(begin, philo, mutex);
+		go_think(philo, mutex, begin);
 	}
     return NULL;
 }
@@ -34,14 +36,17 @@ void go_eat(t_begin *begin, t_philo *philo, t_mutex *mutex)// !! pas de secu pou
     
     (void)mutex;// Prendre les fourchettes
     pthread_mutex_lock(philo->own_fork); // Verrouiller Sa fourchette (gauche)
-    printf("Philo %d a pris la fourchette gauche\n" ,begin->nb_philo);
+    printf("%llu\t Philo %d \ta pris la fourchette gauche\n", time_dif(begin->start_time), philo->order);
+
     pthread_mutex_lock(philo->right_fork); // Verrouiller la fourchette droite
-    printf("Philo %d a pris la fourchette droite\n",begin->nb_philo);
+    printf("%llu\t Philo %d \ta pris la fourchette droite\n", time_dif(begin->start_time), philo->order);
 
     // Manger
+    philo->old_time_last_meal = philo->time_last_meal;
     philo->time_last_meal = get_current_time(); // Mettre à jour le temps du dernier repas
     philo->ticket_repas--; // decrémenter le compteur de repas
-    printf("Philo %d est en train de manger\n", begin->nb_philo);
+    printf("%llu\t Philo %d \test en train de manger\n", time_dif(begin->start_time), philo->order);
+
     usleep(begin->time_to_eat); // Le philosophe mange pendant un certain temps
     // Libérer les fourchettes
     pthread_mutex_unlock(philo->own_fork);
@@ -56,12 +61,12 @@ void go_eat(t_begin *begin, t_philo *philo, t_mutex *mutex)// !! pas de secu pou
     }
 }
 
-void go_sleep(t_begin *begin, t_philo *philo, t_mutex *mutex) 
+void go_sleep(t_begin *begin,t_philo *philo, t_mutex *mutex) 
 {
     (void)mutex;
     (void)philo;
     pthread_mutex_lock(mutex->printing);// lock pour print
-    printf("Philo %d starts sleeping\n", begin->nb_philo);
+    printf("%llu\t Philo %d \tfait une sieste\n", time_dif(begin->start_time), philo->order);
     //print_log(philo)
     pthread_mutex_unlock(mutex->printing);
     
@@ -70,13 +75,13 @@ void go_sleep(t_begin *begin, t_philo *philo, t_mutex *mutex)
     
 }
 
-void go_think(t_begin *begin, t_philo *philo,t_mutex *mutex)
+void go_think(t_philo *philo,t_mutex *mutex,t_begin *begin)
 {
     (void)mutex;
     (void)philo;
 
     pthread_mutex_lock(mutex->printing);// lock pour print
-    printf("Philo %d starts thinking\n", begin->nb_philo);
+    printf("%llu\t Philo %d\t réfléchi \n", time_dif(begin->start_time), philo->order);
     //print_log(philo)//
     pthread_mutex_unlock(mutex->printing);
     
