@@ -60,7 +60,7 @@ void	table_for_one(char **av, int ac, t_begin *begin)
 {
 	unsigned long long timer;
 
-	timer = time_dif(begin);
+	timer = time_dif(begin->start_time);
 	if (ac > 1 && ft_atoi(av[1]) == 1)
 	{
 		printf("%llu\t1\t🥢 has taken a chopstick\t\n", timer);
@@ -81,12 +81,13 @@ int main(int ac, char **av)
 	mutex = NULL;
 
 	check_all_arg(av,ac);//return et stop si probleme, rien a free
-	printf("Time(ms)\tPhilo\tAction\t\n");
+	printf("Time(ms)   Philo\tAction\t\n");
+	printf("--------------------------------------------------------\n");
 
 	init_value_start(av, ac, &begin);
-	time_start(&begin);
+	// time_start(&begin);
 
-	table_for_one(av, ac, &begin);
+	// table_for_one(av, ac, &begin);
 
 	
 	 //init

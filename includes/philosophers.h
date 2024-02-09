@@ -19,6 +19,15 @@
 # define ERROR				1
 # define SUCCESS			0
 
+//Couleur
+#define COLOR_RESET "\033[0m"
+#define COLOR_ROSE "\033[38;5;213m" // Rose n'est pas standard, utiliser un code approximatif
+#define COLOR_LILAC "\033[38;5;183m" // Lilas, aussi approximatif
+#define COLOR_VIOLET "\033[35m" // Violet standard
+#define COLOR_GREEN "\033[32m" // Vert standard
+#define COLOR_CYAN "\033[36m" // Cyan pour un bon contraste avec le reste
+
+
 /*◇───────────────────────────────────────────────────────────────◇*\
 *	Structure
 \*◇───────────────────────────────────────────────────────────────◇*/
@@ -100,6 +109,7 @@ char				*ft_itoa(int n);
 int					ft_nbrcount(int n);
 size_t				ft_strlen(const char *str);
 int					ft_atoi(const char *nptr);
+const char*			get_philo_color(int color_index);
 
 //init
 t_eye_arg 			**init_threads(t_philo *philo, t_begin *begin, t_mutex *mutex);
@@ -110,9 +120,9 @@ t_eye_arg			*init_arg_gardian(t_begin *begin, t_philo *philo);
 void				init_philos(t_philo **philo, int nb_philo, t_begin *begin) ;
 void				init_all(t_philo **philo, t_begin *begin, int argc, char **argv) ;
 //time
-unsigned long long	time_dif(suseconds_t	current_time);
+unsigned long long	time_dif(unsigned long long int	current_time);
 void				time_start(t_begin *begin);
-long				get_current_time(void);
+unsigned long long int				get_current_time(void);
 
 //guardian
 void				*keep_an_eye(void *arg);

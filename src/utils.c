@@ -1,5 +1,18 @@
 #include "../includes/philosophers.h"
 
+const char* get_philo_color(int color_index) 
+{
+   
+    if (color_index == 5) return COLOR_ROSE;
+    if (color_index == 1) return COLOR_LILAC;
+    if (color_index == 2) return COLOR_VIOLET;
+    if (color_index == 3) return COLOR_GREEN;
+    if (color_index == 4) return COLOR_CYAN;
+
+    return COLOR_RESET; // Sécurité, ne devrait pas arriver
+}
+
+
 int	ft_nbrcount(int n)
 {
 	int	len;

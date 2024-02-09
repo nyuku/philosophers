@@ -8,6 +8,20 @@ void init_all(t_philo **philo, t_begin *begin, int argc, char **argv)
     init_philos(philo, begin->nb_philo, begin);
 }
 
+t_eye_arg *init_arg_gardian(t_begin *begin, t_philo *philo)
+{
+	t_eye_arg *eye_arg = malloc(sizeof(t_eye_arg));
+	if (eye_arg == NULL) {
+		// Gérer l'erreur d'allocation de mémoire
+		return NULL;
+	}
+
+	eye_arg->philo = philo;
+	eye_arg->begin = begin;
+
+	return (eye_arg);
+}
+
 t_eye_arg	**init_threads(t_philo *philo, t_begin *begin, t_mutex *mutex)
 {
 	t_philo *current;
@@ -22,6 +36,17 @@ t_eye_arg	**init_threads(t_philo *philo, t_begin *begin, t_mutex *mutex)
         exit(EXIT_FAILURE);
     }
 	int i = 0;
+	time_start(begin);
+	//-------------------------------
+	t_eye_arg *keep_an_eye_arg = init_arg_gardian(begin, philo);
+	bool_threads = pthread_create(&begin->id_gardian, NULL, keep_an_eye, (void *)keep_an_eye_arg); // ici creation du philo et appe;ler la struc *arg
+		if ( bool_threads == ERROR)
+		{
+			printf("pas pu creer le thread\n");
+			exit(0);
+		}
+	//--------------------------------------------
+	bool_threads = SUCCESS;
 	while(current)
 	{
 		eye_args[i]  = init_eye_arg(current, begin, mutex);
@@ -65,19 +90,6 @@ void init_value_start(char **av, int ac, t_begin *begin)
 
 
 
-t_eye_arg *init_arg_gardian(t_begin *begin, t_philo *philo)
-{
-	t_eye_arg *eye_arg = malloc(sizeof(t_eye_arg));
-	if (eye_arg == NULL) {
-		// Gérer l'erreur d'allocation de mémoire
-		return NULL;
-	}
-
-	eye_arg->philo = philo;
-	eye_arg->begin = begin;
-
-	return (eye_arg);
-}
 
 t_eye_arg *init_eye_arg(t_philo *philo, t_begin *begin, t_mutex *mutex) 
 {

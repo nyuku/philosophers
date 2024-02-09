@@ -6,7 +6,7 @@
 #    By: angela <angela@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/24 22:57:11 by angela            #+#    #+#              #
-#    Updated: 2024/02/05 15:03:05 by angela           ###   ########.fr        #
+#    Updated: 2024/02/09 18:09:09 by angela           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,8 +35,6 @@ DEBUG			=	-fsanitize=address -g3
 # ---------------- Sources -----------
 SRC				=	./src/main.c \
 					./src/check_arg.c \
-					./src/threads_maker.c\
-					./src/threads.c\
 					./src/utils.c\
 					./src/node_list.c\
 					./src/init.c\
