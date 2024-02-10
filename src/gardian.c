@@ -16,22 +16,22 @@ void print_log(int time, char *message, int ph_id, pthread_mutex_t *print_mutex,
 }
 
 
-int starving(t_philo *philo, t_begin *begin)// check entre les repas...pas temps actuel
-{
-	//struct	timeval time;
+// int starving(t_philo *philo, t_begin *begin)// check entre les repas...pas temps actuel
+// {
+// 	//struct	timeval time;
 
-	// gettimeofday(&time, NULL);
-	// unsigned long long current_time = (unsigned long long )(time.tv_sec * 1000) + (unsigned long long )(time.tv_usec / 1000); // Convertir en millisecondes
-	unsigned long long int time_satrving = 0;
-	time_satrving = time_dif(philo->old_time_last_meal);
-	// Vérifier si le philosophe est en train de mourir de faim
-	if (time_satrving > begin->time_to_eat) 
-	{
-		return ERROR; // Le philosophe est en train de mourir de faim
-	}
+// 	// gettimeofday(&time, NULL);
+// 	// unsigned long long current_time = (unsigned long long )(time.tv_sec * 1000) + (unsigned long long )(time.tv_usec / 1000); // Convertir en millisecondes
+// 	unsigned long long int time_satrving = 0;
+// 	time_satrving = time_dif(philo->old_time_last_meal);
+// 	// Vérifier si le philosophe est en train de mourir de faim
+// 	if (time_satrving > begin->time_to_eat) 
+// 	{
+// 		return ERROR; // Le philosophe est en train de mourir de faim
+// 	}
 
-	return SUCCESS; // Le philosophe est en sécurité
-}
+// 	return SUCCESS; // Le philosophe est en sécurité
+// }
 
 void *keep_an_eye(void *arg) {
     t_eye_arg *eye_arg = (t_eye_arg *)arg;
@@ -39,22 +39,33 @@ void *keep_an_eye(void *arg) {
     t_begin *begin = eye_arg->begin;
     int all_lunch_eaten = 0;
 
-    while (1) {
+    while (1) 
+	{
         current = eye_arg->philo; // Commence à vérifier depuis le premier philosophe
+		if (all_lunch_eaten == begin->nb_philo) 
+		{
+            printf("Fin du buffet\n");
+            break; // Sortir de la boucle si tous les philosophes ont terminé de manger
+        } 
+        while (current != NULL) 
+		{ 
+            pthread_mutex_lock(&current->time_last_meal_mutex);
+			unsigned long long int time_since_last_meal = time_dif(begin->start_time) - current->time_last_meal ;
+			pthread_mutex_unlock(&current->time_last_meal_mutex);
 
-        while (current != NULL) { 
-            unsigned long long int time_since_last_meal = time_dif(begin->start_time) -current->time_last_meal ;
-
+			if (current->stop = 1)
+				ft_someone_dead(time_dif(begin->start_time, current->order,(time_since_last_meal - begin->time_to_die))// time, le philo,late
             if ((time_since_last_meal > (unsigned long long)begin->time_to_die) && current->time_last_meal != 0)
 			{
-                printf("time_since_last_meal calculé %llu\n", time_since_last_meal);
-				printf("time last meal %llu\n", current->time_last_meal);
-				printf("begin->time_to_die %d\n",begin->time_to_die);
-				printf("someone is dead here, philo %d\n",current->order);
+                //printf("time_since_last_meal calculé %llu\n", time_since_last_meal);
+				// printf("time last meal %llu\n", current->time_last_meal);
+				// printf("begin->time_to_die %d\n",begin->time_to_die);
+				printf("%llu\t someone is dead here, philo %d at %llu late time\n",time_dif(begin->start_time), current->order,(time_since_last_meal - begin->time_to_die));
                 return (NULL); // Arrêter si un philosophe est mort
             }
 
-            if (current->belly_full == 1) {
+            if (current->belly_full == 1) 
+			{
                 all_lunch_eaten++;
                 current->belly_full = 0; // Marquer comme compté pour ne pas réincrémenter all_lunch_eaten
             }
@@ -62,15 +73,6 @@ void *keep_an_eye(void *arg) {
             current = current->next;
         }
 
-        if (all_lunch_eaten == begin->nb_philo) {
-            printf("Fin du buffet\n");
-            break; // Sortir de la boucle si tous les philosophes ont terminé de manger
-        } else {
-            // Si tous les philosophes n'ont pas fini, réinitialise all_lunch_eaten pour le prochain tour
-            all_lunch_eaten = 0;
-        }
-
-        usleep(10000); // Attente courte pour réduire la consommation CPU
     }
 
     return NULL;

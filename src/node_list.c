@@ -2,14 +2,18 @@
 
 // juste creer le slistes pas de threads encore
 //gepeto, creationde la lliste, pas de threads mais au moins mutex
-void free_philo_list(t_philo *philo) {
+void free_philo_list(t_philo *philo) 
+{
     t_philo *current = philo;
     t_philo *next;
 
-    while (current != NULL) {
+    while (current != NULL) 
+	{
         next = current->next; // Sauvegarder le pointeur vers le prochain élément avant de libérer l'actuel
-        free(current); // Libérer l'espace mémoire alloué pour le nœud actuel
+        pthread_mutex_destroy(&current->time_last_meal_mutex);
+		free(current); // Libérer l'espace mémoire alloué pour le nœud actuel
         current = next; // Passer au nœud suivant
+		
     }
 }
 
@@ -67,9 +71,10 @@ t_philo *creat_list(int nb_philo, t_begin *begin)
         }
 		before = new_philo;
 		new_philo->ticket_repas = begin->nb_lunch;
-		new_philo->old_time_last_meal = 0;//test init
+		
 		new_philo->time_last_meal = 0;//test init
 		new_philo->belly_full = 0;
+		pthread_mutex_init(&new_philo->time_last_meal_mutex, NULL);
 
         i++;
     }

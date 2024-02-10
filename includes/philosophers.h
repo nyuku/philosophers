@@ -44,10 +44,10 @@ typedef struct			s_philo
 	struct s_philo		*next;
 	struct s_philo		*prev;
 	int					ticket_repas;// decrementer a chaque repas
-	unsigned long long	old_time_last_meal;
 	unsigned long long	time_last_meal;
 	int					*stop;// status pour check par gardian
 	int 				belly_full;
+	pthread_mutex_t time_last_meal_mutex;
 }						t_philo;
 
 typedef struct 			s_mutex
@@ -69,10 +69,6 @@ typedef	struct 			s_begin // pourrait etre des long? depend comment check_arg
 
 }						t_begin;
 
-typedef	struct 			s_statut_all
-{
-	int					all_eaten;
-}						t_statut_all;
 
 typedef struct 			s_eye_arg
 {
