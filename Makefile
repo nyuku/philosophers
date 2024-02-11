@@ -6,7 +6,7 @@
 #    By: angela <angela@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/24 22:57:11 by angela            #+#    #+#              #
-#    Updated: 2024/02/09 18:09:09 by angela           ###   ########.fr        #
+#    Updated: 2024/02/11 13:35:17 by angela           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,7 @@ BS_TXT			=	echo "\n\n"
 CHARG_LINE_TXT	=	echo "$(BG_GREEN)    $(ENDCOLOR)\c"
 
 # ---------------- FLAGS --------------
-CFLAGS			=	-Wall -Wextra -Werror
+CFLAGS			=	-Wall -Wextra -Werror 
 DEBUG			=	-fsanitize=address -g3
 
 # ---------------- Sources -----------

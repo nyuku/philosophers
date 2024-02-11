@@ -22,12 +22,14 @@ void *keep_an_eye(void *arg)
         current = eye_arg->philo; // Commence à vérifier depuis le premier philosophe
 		if (all_lunch_eaten == begin->nb_philo) 
 		{
+            begin->fatality = 1;
+            current->stop = 1;
             printf("Fin du buffet\n");
+            
             break; // Sortir de la boucle si tous les philosophes ont terminé de manger
         } 
         while (current != NULL) 
 		{ 
-            
             pthread_mutex_lock(&current->time_last_meal_mutex);
 			unsigned long long int time_since_last_meal = time_dif(begin->start_time) - current->time_last_meal ;
 			pthread_mutex_unlock(&current->time_last_meal_mutex);
@@ -38,6 +40,8 @@ void *keep_an_eye(void *arg)
 				//pthread_mutex_lock(mutex->m_fatality);
        			if (begin->fatality == 0)
                     begin->fatality = 1;
+                //pthread_mutex_unlock(mutex->m_fatality);
+                
                 current->stop = 1;
         		
 				

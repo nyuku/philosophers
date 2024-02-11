@@ -27,11 +27,11 @@
 #define COLOR_GREEN "\033[32m" // Vert standard
 #define COLOR_CYAN "\033[36m" // Cyan pour un bon contraste avec le reste
 
-#define LEFT_FORK	a pris la fourchette gauche
-#define	RIGHT_FORK	a pris la fourchette droite
-#define	EAT 		est en train de manger
-#define	SLEEP 		fait une sieste
-#define	THINK 		réflechi
+#define LEFT_FORK	"a pris la fourchette gauche"
+#define	RIGHT_FORK	"a pris la fourchette droite"
+#define	EAT 		"est en train de manger"
+#define	SLEEP 		"fait une sieste"
+#define	THINK 		"réflechi"
 /*◇───────────────────────────────────────────────────────────────◇*\
 *	Structure
 \*◇───────────────────────────────────────────────────────────────◇*/
@@ -129,7 +129,7 @@ unsigned long long int				get_current_time(void);
 
 //guardian
 void				*keep_an_eye(void *arg);
-void				print_log(int time, char *message, int ph_id, pthread_mutex_t *print_mutex, t_philo *philo);
+
 //main
 void    			wait_thread(t_philo	*philo, t_begin *begin);
 
@@ -138,5 +138,6 @@ void				*routine(void *arg);
 void				go_eat(t_begin *begin, t_philo *philo, t_mutex *mutex);
 void				go_sleep(t_begin *begin,t_philo *philo, t_mutex *mutex);
 void				go_think(t_begin *begin,t_philo *philo, t_mutex *mutex);
+void	ph_log(int time, char *message, t_philo *philo, t_mutex *mutex);
 
 #endif
