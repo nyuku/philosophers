@@ -103,7 +103,7 @@ void go_sleep(t_begin *begin,t_philo *philo, t_mutex *mutex)
     
 }
 
-void go_think(t_begin *begin,t_philo *philo, t_mutex *mutex) 
+void go_think(t_begin *begin,t_philo *philo, t_mutex *mutex)
 
 {
     (void)mutex;

@@ -92,8 +92,8 @@ int					threads_maker(void);
 void				free_mutex(t_mutex *mutex);
 
 //threads
-void				*thread_routine(void *arg);
-int					init_philo(int ac);
+// void				*thread_routine(void *arg);
+// int					init_philo(int ac);
 
 //node
 t_philo				*create_node(int nb_philo);

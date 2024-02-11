@@ -6,7 +6,7 @@
 /*   By: angela <angela@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 18:16:16 by angela            #+#    #+#             */
-/*   Updated: 2024/02/11 01:02:19 by angela           ###   ########.fr       */
+/*   Updated: 2024/02/11 11:21:27 by angela           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,22 @@ void	free_eye_args(t_eye_arg **eye_args, int count)
 	}
 	free(eye_args);
 }
+// void wait_thread(t_philo *philo, t_begin *begin) {
+//     t_philo *current = philo;
+
+//     while (current) {
+//         printf("Joining thread for philo %d\n", current->order); // Debug print
+//         if (pthread_join(current->id_philo, NULL) != 0) {
+//             perror("pthread_join failed");
+//         }
+//         current = current->next;
+//     }
+
+//     printf("Joining gardian thread\n"); // Debug print
+//     if (pthread_join(begin->id_gardian, NULL) != 0) {
+//         perror("pthread_join for gardian failed");
+//     }
+// }
 
 void	wait_thread(t_philo	*philo, t_begin *begin)
 {
@@ -51,7 +67,12 @@ void	free_mutex(t_mutex *mutex)
             pthread_mutex_destroy(mutex->time);
             free(mutex->time);
         }
+		if (mutex->m_fatality != NULL)
+		{
+			pthread_mutex_destroy(mutex->m_fatality);
+			free(mutex->m_fatality);
 
+		}
         // Libérer la structure t_mutex elle-même
         free(mutex);
 		mutex = NULL;
@@ -64,10 +85,15 @@ void    kill_forks(t_philo	*philo)
 	t_philo    *current;
 
 	current = philo;
-	while(current)
+	while(current != NULL)
 	{
-		pthread_mutex_destroy(current->own_fork);
-		free(philo->own_fork);
+		if (current->own_fork != NULL)
+		{
+			pthread_mutex_destroy(current->own_fork);
+			free(current->own_fork);
+		}
+		pthread_mutex_destroy(&current->time_last_meal_mutex);
+		
 		current = current->next;
 	}
 }
@@ -105,14 +131,8 @@ int main(int ac, char **av)
 	// time_start(&begin);
 
 	// table_for_one(av, ac, &begin);
-
-	
-	 //init
-	
 	mutex = init_mutex();
 	init_all(&philo, &begin, ac, av);
-	// t_eye_arg *eye_arg = init_eye_arg(philo, &begin, mutex);
-
 	begin.fatality = 0;
 	t_eye_arg	**eye_args = init_threads(philo, &begin, mutex);
 
@@ -120,9 +140,13 @@ int main(int ac, char **av)
 
 	//end
 	wait_thread(philo, &begin);
+	printf("1\n");
 	kill_forks(philo);
+	printf("2\n");
 	free_mutex(mutex);
+	printf("3\n");
 	free_philo_list(philo);
+	printf("4\n");
 	free_eye_args(eye_args, begin.nb_philo);
 	return (SUCCESS);
 

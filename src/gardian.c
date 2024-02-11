@@ -37,7 +37,7 @@ void *keep_an_eye(void *arg)
 				//pthread_mutex_lock(mutex->m_fatality);
        			if (begin->fatality == 0)
                     begin->fatality = 1;
-        		//pthread_mutex_unlock(mutex->m_fatality);
+        		
 				
 				printf("%llu\t someone is dead here, philo %d at %llu late time\n",time_dif(begin->start_time), current->order,(time_since_last_meal - begin->time_to_die));
                 return (NULL); // Arrêter si un philosophe est mort
