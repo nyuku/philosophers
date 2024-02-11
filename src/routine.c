@@ -18,22 +18,43 @@ void *routine(void *arg)
     if (philo->order % 2)// si paire on fait commencer les paires?
 		usleep(3000);//3 millisecondes
 		
-	while(1)
+	while (1)
 	{
 		// objectif de repas, permettant à ce philosophe de "se retirer" de la simulation
 		if (!philo->ticket_repas)// encore a table?
 			break;
-		go_eat(begin, philo, mutex);
-		go_sleep(begin, philo, mutex);
-		go_think(philo, mutex, begin);
+        pthread_mutex_lock(mutex->m_fatality);
+        if (begin->fatality == 0)
+        {
+            pthread_mutex_unlock(mutex->m_fatality);
+            go_eat(begin, philo, mutex);
+            go_sleep(begin, philo, mutex);
+            go_think(begin, philo, mutex);
+        }
+        else
+        {
+                printf("faut que j'arrete je suis %d\n",philo->order);
+                pthread_mutex_unlock(mutex->m_fatality);
+                break;
+        }
 	}
+    // printf("rayayayayayya\n");
+            // pthread_mutex_unlock(mutex->m_fatality);
+            // return; // Sortie anticipée si fatality est déclenché
     return NULL;
 }
 
 void go_eat(t_begin *begin, t_philo *philo, t_mutex *mutex)// !! pas de secu pour print
 {
-    
     (void)mutex;// Prendre les fourchettes
+    pthread_mutex_lock(mutex->m_fatality);
+    if (begin->fatality == 1)
+    {
+        pthread_mutex_unlock(mutex->m_fatality);
+        return;
+    }
+    pthread_mutex_unlock(mutex->m_fatality);
+
     pthread_mutex_lock(philo->own_fork); 
     printf("%llu\t %sPhilo %d \ta pris la fourchette gauche\n" COLOR_RESET, time_dif(begin->start_time), get_philo_color(philo->order), philo->order);
     pthread_mutex_lock(philo->right_fork); 
@@ -54,7 +75,11 @@ void go_eat(t_begin *begin, t_philo *philo, t_mutex *mutex)// !! pas de secu pou
 
     // Vérifier si le philosophe a terminé ses repas
     if (philo->ticket_repas == 0) 
-        philo->belly_full = 1; // Indiquer que le philosophe a terminé de manger
+        {
+            philo->belly_full = 1;
+            return;
+        }
+             // Indiquer que le philosophe a terminé de manger
 
 }
 
@@ -62,6 +87,15 @@ void go_sleep(t_begin *begin,t_philo *philo, t_mutex *mutex)
 {
     (void)mutex;
     (void)philo;
+    pthread_mutex_lock(mutex->m_fatality);
+    if (begin->fatality == 1)
+    {
+       printf("paf fini dde dormir\n");
+       pthread_mutex_unlock(mutex->m_fatality);
+        return; // Sortie anticipée si fatality est déclenché
+    }
+    pthread_mutex_unlock(mutex->m_fatality);
+
     pthread_mutex_lock(mutex->printing);
     printf("%llu\t %sPhilo %d \tfait une sieste\n" COLOR_RESET, time_dif(begin->start_time), get_philo_color(philo->order), philo->order);
     pthread_mutex_unlock(mutex->printing);
@@ -69,10 +103,19 @@ void go_sleep(t_begin *begin,t_philo *philo, t_mutex *mutex)
     
 }
 
-void go_think(t_philo *philo,t_mutex *mutex,t_begin *begin)
+void go_think(t_begin *begin,t_philo *philo, t_mutex *mutex) 
+
 {
     (void)mutex;
     (void)philo;
+    pthread_mutex_lock(mutex->m_fatality);
+    if (begin->fatality == 1)
+    {
+       printf("fini de penser\n");
+       pthread_mutex_unlock(mutex->m_fatality);
+        return; // Sortie anticipée si fatality est déclenché
+    }
+    pthread_mutex_unlock(mutex->m_fatality);
 
     pthread_mutex_lock(mutex->printing);
     printf("%llu\t %sPhilo %d\tréfléchi \n" COLOR_RESET, time_dif(begin->start_time), get_philo_color(philo->order), philo->order);

@@ -1,13 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   time.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: angela <angela@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/10 18:12:42 by angela            #+#    #+#             */
+/*   Updated: 2024/02/10 18:14:06 by angela           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/philosophers.h"
 
-int get_timer(void)
+int	get_timer(void)
 {
 	struct timeval	time;
-	int t = 0;
+	int				t;
+
+	t = 0;
 	gettimeofday(&time, NULL);
 	t = time.tv_sec;
 	return (t);
-
 }
 
 unsigned long long int	get_current_time(void)
@@ -20,22 +33,15 @@ unsigned long long int	get_current_time(void)
 	return (time_now);
 }
 
-// void	time_start(t_begin *begin)
-// {
-// 	begin->start_time = get_current_time();;
-// }
 void	time_start(t_begin *begin)
 {
-	begin->start_time = get_timer();;
+	begin->start_time = get_timer();
 }
 
-
-unsigned long long int time_dif(unsigned long long int current_time)
+unsigned long long int	time_dif(unsigned long long int current_time)
 {
-    // long long int temp_now = get_current_time(); // Utilise get_current_time pour obtenir le temps actuel en ms
-    // long long int result = temp_now - current_time; // Calcule la différence en ms
-    // return result;
 	struct timeval	time;
+
 	gettimeofday(&time, NULL);
 	return (((time.tv_sec - current_time) * 1000) + (time.tv_usec / 1000));
 }

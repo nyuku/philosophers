@@ -1,20 +1,36 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: angela <angela@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/02/10 18:16:16 by angela            #+#    #+#             */
+/*   Updated: 2024/02/11 01:02:19 by angela           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/philosophers.h"
 
-void free_eye_args(t_eye_arg **eye_args, int count)
+void	free_eye_args(t_eye_arg **eye_args, int count)
 {
-    for (int i = 0; i < count; i++)
-    {
-        free(eye_args[i]);
-    }
-    free(eye_args);
+	int	i;
+
+	i = 0;
+	while (i < count)
+	{
+		free(eye_args[i]);
+		i++;
+	}
+	free(eye_args);
 }
 
-void    wait_thread(t_philo	*philo, t_begin *begin)
+void	wait_thread(t_philo	*philo, t_begin *begin)
 {
-	t_philo    *current;
+	t_philo	*current;
 
 	current = philo;
-	while(current)
+	while (current)
 	{
 		pthread_join(current->id_philo, NULL);
 		current = current->next;
@@ -22,13 +38,13 @@ void    wait_thread(t_philo	*philo, t_begin *begin)
 	pthread_join(begin->id_gardian, NULL);
 }
 
-void free_mutex(t_mutex *mutex) 
+void	free_mutex(t_mutex *mutex)
 {
-    if (mutex != NULL) 
+	if (mutex != NULL)
 	{
-        // Détruire les mutex avant de libérer la mémoire
-        if (mutex->printing != NULL) {
-            pthread_mutex_destroy(mutex->printing);
+        if (mutex->printing != NULL) 
+		{
+			pthread_mutex_destroy(mutex->printing);
             free(mutex->printing);
         }
         if (mutex->time != NULL) {
@@ -74,7 +90,8 @@ void	table_for_one(char **av, int ac, t_begin *begin)
 
 int main(int ac, char **av)
 {
-
+	
+	
 	t_begin begin;
     t_mutex *mutex;
     t_philo *philo = NULL; // Liste des philosophes
@@ -91,11 +108,12 @@ int main(int ac, char **av)
 
 	
 	 //init
+	
 	mutex = init_mutex();
 	init_all(&philo, &begin, ac, av);
 	// t_eye_arg *eye_arg = init_eye_arg(philo, &begin, mutex);
 
-
+	begin.fatality = 0;
 	t_eye_arg	**eye_args = init_threads(philo, &begin, mutex);
 
 

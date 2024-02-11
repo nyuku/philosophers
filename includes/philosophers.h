@@ -48,12 +48,14 @@ typedef struct			s_philo
 	int					*stop;// status pour check par gardian
 	int 				belly_full;
 	pthread_mutex_t time_last_meal_mutex;
+	
 }						t_philo;
 
 typedef struct 			s_mutex
 {
 	pthread_mutex_t		*printing;
 	pthread_mutex_t		*time;
+	pthread_mutex_t		*m_fatality;
 }						t_mutex;
 
 
@@ -66,6 +68,7 @@ typedef	struct 			s_begin // pourrait etre des long? depend comment check_arg
 	int					nb_lunch;
 	suseconds_t			start_time;
 	pthread_t			id_gardian;
+	int					fatality;
 
 }						t_begin;
 
@@ -130,6 +133,6 @@ void    			wait_thread(t_philo	*philo, t_begin *begin);
 void				*routine(void *arg);
 void				go_eat(t_begin *begin, t_philo *philo, t_mutex *mutex);
 void				go_sleep(t_begin *begin,t_philo *philo, t_mutex *mutex);
-void				go_think(t_philo *philo, t_mutex *mutex, t_begin *begin);
+void				go_think(t_begin *begin,t_philo *philo, t_mutex *mutex);
 
 #endif
