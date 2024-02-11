@@ -27,12 +27,16 @@
 #define COLOR_GREEN "\033[32m" // Vert standard
 #define COLOR_CYAN "\033[36m" // Cyan pour un bon contraste avec le reste
 
-
+#define LEFT_FORK	a pris la fourchette gauche
+#define	RIGHT_FORK	a pris la fourchette droite
+#define	EAT 		est en train de manger
+#define	SLEEP 		fait une sieste
+#define	THINK 		réflechi
 /*◇───────────────────────────────────────────────────────────────◇*\
 *	Structure
 \*◇───────────────────────────────────────────────────────────────◇*/
 
-
+ 
 
 typedef struct			s_philo
 {
@@ -45,7 +49,7 @@ typedef struct			s_philo
 	struct s_philo		*prev;
 	int					ticket_repas;// decrementer a chaque repas
 	unsigned long long	time_last_meal;
-	int					*stop;// status pour check par gardian
+	int					stop;// status pour check par gardian
 	int 				belly_full;
 	pthread_mutex_t time_last_meal_mutex;
 	

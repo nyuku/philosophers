@@ -6,7 +6,7 @@
 /*   By: angela <angela@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 18:01:48 by angela            #+#    #+#             */
-/*   Updated: 2024/02/11 11:11:57 by angela           ###   ########.fr       */
+/*   Updated: 2024/02/11 12:11:19 by angela           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ t_philo	*creat_list(int nb_philo, t_begin *begin)
 		new_philo->ticket_repas = begin->nb_lunch;
 		new_philo->time_last_meal = 0;
 		new_philo->belly_full = 0;
+		new_philo->stop = 0;
 		pthread_mutex_init(&new_philo->time_last_meal_mutex, NULL);
 		i++;
 	}
